@@ -18,6 +18,7 @@ package com.google.engedu.bstguesser;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static android.content.ContentValues.TAG;
 
 public class BinaryTreeView extends View {
 
@@ -44,6 +47,7 @@ public class BinaryTreeView extends View {
         for (int value : generateRandomSequence(TREE_SIZE)) {
             tree.insert(value);
         }
+
         tree.positionNodes(this.getWidth());
         searchSequence = generateRandomSequence(TREE_SIZE);
         searchPosition = 0;
@@ -81,9 +85,15 @@ public class BinaryTreeView extends View {
                     int targetValue = searchSequence.get(searchPosition);
                     int hitValue = tree.click(event.getX(), event.getY(), targetValue);
                     if (hitValue != -1) {
+                        //if(!tree.isClicked(hitValue))
+                        //    return false;
                         invalidate();
                         if (hitValue != targetValue) {
                             tree.invalidateNode(targetValue);
+                            if(searchSequence.indexOf(hitValue) > searchPosition)
+                                searchPosition++;
+                            searchSequence.remove(searchSequence.indexOf(hitValue));
+                            searchSequence.add(0, hitValue);
                         }
                         searchPosition++;
                         updateMessage();

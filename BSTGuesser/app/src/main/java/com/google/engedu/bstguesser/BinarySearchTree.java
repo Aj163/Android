@@ -20,6 +20,9 @@ import android.graphics.Canvas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.jar.Pack200;
+import android.util.Log;
+
+import static android.content.ContentValues.TAG;
 
 public class BinarySearchTree {
     private TreeNode root = null;
@@ -31,8 +34,9 @@ public class BinarySearchTree {
         if (root == null) {
             root = new TreeNode(value);
             return;
-        } else {
-            root.insert(value);
+        }
+        else {
+            root = root.insert(root, value);
         }
     }
 
@@ -51,12 +55,21 @@ public class BinarySearchTree {
 
     private TreeNode search(int value) {
         TreeNode current = root;
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        while(true){
+            if(current.getValue() == value)
+                break;
+            if(current.getValue() > value)
+                current = current.left;
+            else
+                current = current.right;
+        }
         return current;
+    }
+
+    public boolean isClicked(int value){
+        TreeNode currNode = search(value);
+        //Log.d(TAG, Boolean.toString(currNode.getShowValue()));
+        return currNode.getShowValue();
     }
 
     public void invalidateNode(int targetValue) {

@@ -19,6 +19,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.Log;
+
+import static android.content.ContentValues.TAG;
 
 public class TreeNode {
     private static final int SIZE = 60;
@@ -37,12 +40,79 @@ public class TreeNode {
         right = null;
     }
 
-    public void insert(int valueToInsert) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+    private int max(int a, int b){
+        if(a>b)
+            return a;
+        return b;
+    }
+
+    private int heightOfNode(TreeNode curr){
+        if(curr == null)
+            return -1;
+        return curr.height;
+    }
+
+    private TreeNode rotateRight(TreeNode curr){
+        TreeNode x = curr.left;
+        TreeNode y = x.right;
+
+        x.right = curr;
+        curr.left = y;
+
+        curr.height = max(heightOfNode(curr.left), heightOfNode(curr.right)) +1;
+        x.height = max(heightOfNode(x.left), heightOfNode(x.right)) +1;
+        return x;
+    }
+
+    private TreeNode rotateLeft(TreeNode curr){
+        TreeNode x = curr.right;
+        TreeNode y = x.left;
+
+        x.left = curr;
+        curr.right = y;
+
+        curr.height = max(heightOfNode(curr.left), heightOfNode(curr.right)) +1;
+        x.height = max(heightOfNode(x.left), heightOfNode(x.right)) +1;
+        return x;
+    }
+
+    private int balanceFactor(TreeNode curr){
+        return (heightOfNode(curr.left) - heightOfNode(curr.right));
+    }
+
+    public TreeNode insert(TreeNode curr, int valueToInsert) {
+        int balance;
+
+        if(curr == null)
+            return new TreeNode(valueToInsert);
+        if(curr.value > valueToInsert)
+            curr.left = insert(curr.left, valueToInsert);
+        else
+            curr.right = insert(curr.right, valueToInsert);
+
+
+        curr.height = max(heightOfNode(curr.left), heightOfNode(curr.right)) +1;
+        balance = balanceFactor(curr);
+
+
+        if(balance > 1 && valueToInsert < curr.left.value)
+            return rotateRight(curr);
+        else if(balance < -1 && valueToInsert > curr.right.value)
+            return rotateLeft(curr);
+        else if(balance > 1){
+            curr.left = rotateLeft(curr.left);
+            return rotateRight(curr);
+        }
+        else if(balance < -1){
+            curr.right = rotateRight(curr.right);
+            return rotateLeft(curr);
+        }
+
+        return curr;
+    }
+
+    public boolean getShowValue(){
+        return showValue;
     }
 
     public int getValue() {
