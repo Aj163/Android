@@ -103,43 +103,43 @@ public class PuzzleBoardView extends View {
     }
 
     public void solve() {
-//        PriorityQueue<PuzzleBoard> priorityQueue = new PriorityQueue<PuzzleBoard>(1,
-//                new Comparator<PuzzleBoard>() {
-//                    @Override
-//                    public int compare(PuzzleBoard puzzleBoard, PuzzleBoard t1) {
-//                        return puzzleBoard.priority() - t1.priority();
-//                    }
-//                });
-//
-//        priorityQueue.add(puzzleBoard);
-//        PuzzleBoard curr = puzzleBoard;
-//
-//        while(!priorityQueue.isEmpty()){
-//            curr = priorityQueue.peek();
-//            priorityQueue.remove(curr);
-//            if(curr.resolved())
-//                break;
-//
-//            ArrayList<PuzzleBoard> neighbourList = curr.neighbours();
-//            for(int i=0; i<neighbourList.size(); i++)
-//                if(!priorityQueue.contains(neighbourList.get(i))) {
-//                    neighbourList.get(i).setPreviousBoard(curr);
-//                    priorityQueue.add(neighbourList.get(i));
-//                }
-//        }
-//
-//        ArrayList<PuzzleBoard> animationList = new ArrayList<PuzzleBoard>();
-//        int cnt = 0;
-//        do{
-//            cnt++;
-//            animationList.add(curr);
-//            curr = curr.getPreviousBoard();
-//        } while(!curr.equals(puzzleBoard));
-//
-//        Log.d("CNT = ", Integer.toString(cnt));
-//        Collections.reverse(animationList);
-//        animation = new ArrayList<PuzzleBoard>();
-//        animation.add(puzzleBoard.neighbours().get(0));
-//        Log.d("Size", Integer.toString(animation.size()));
+        PriorityQueue<PuzzleBoard> priorityQueue = new PriorityQueue<PuzzleBoard>(1,
+                new Comparator<PuzzleBoard>() {
+                    @Override
+                    public int compare(PuzzleBoard puzzleBoard, PuzzleBoard t1) {
+                        return puzzleBoard.priority() - t1.priority();
+                    }
+                });
+
+        priorityQueue.add(puzzleBoard);
+        PuzzleBoard curr = puzzleBoard;
+
+        while(!priorityQueue.isEmpty()){
+            curr = priorityQueue.peek();
+            priorityQueue.remove(curr);
+            if(curr.resolved())
+                break;
+
+            ArrayList<PuzzleBoard> neighbourList = curr.neighbours();
+            for(int i=0; i<neighbourList.size(); i++)
+                if(!priorityQueue.contains(neighbourList.get(i))) {
+                    neighbourList.get(i).setPreviousBoard(curr);
+                    priorityQueue.add(neighbourList.get(i));
+                }
+        }
+
+        ArrayList<PuzzleBoard> animationList = new ArrayList<PuzzleBoard>();
+        int cnt = 0;
+        do{
+            cnt++;
+            animationList.add(curr);
+            curr = curr.getPreviousBoard();
+        } while(!curr.equals(puzzleBoard));
+
+        Log.d("CNT = ", Integer.toString(cnt));
+        Collections.reverse(animationList);
+        animation = new ArrayList<PuzzleBoard>(animationList);
+        invalidate();
+        Log.d("Size", Integer.toString(animation.size()));
     }
 }
